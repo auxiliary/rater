@@ -37,7 +37,8 @@
                 });
                 $($container).css({
                     height: $(layer).height(),
-                    position: 'relative'
+                    position: 'relative',
+                    cursor: this.settings.cursor,
                 });
 
                 return layer;
@@ -54,9 +55,10 @@
                 });
             }
 
-            this.select = function()
+            this.select = function(ev)
             {
-                var selected_width = this.layers.hover_layer.width();
+                var x = ev.pageX - $($container).offset().left;
+                var selected_width = this.toWidth(this.toValue(x));
                 this.layers.select_layer.css({
                     display: 'block',
                     width: selected_width,
@@ -123,7 +125,8 @@
     $.fn.rate.settings = {
         min_value: 0,
         max_value: 10,
-        step_size: 0.5,
+        step_size: 1,
+        initial_value: 0,
         symbols: {
             utf8_star: {
                 base: '\u2606',
@@ -137,7 +140,7 @@
             },
         },
         selected_symbol_type: 'utf8_star',
-        initial_value: 0,
+        cursor: 'default',
     };
 
 }(jQuery));
