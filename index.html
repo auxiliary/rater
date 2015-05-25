@@ -8,16 +8,29 @@
     <script>
         $(document).ready(function(){
             var options = {
-                max_value: 10
+                max_value: 7,
+                step_size: 0.5,
+                selected_symbol_type: 'utf8_florette'
             }
-            $(".rate").rate(options);
+            $(".rate").rate();
+            $(".rate2").rate(options);
         });
     </script>
 
+    <style>
+        .rate-base-layer
+        {
+            color: #aaa;
+        }
+        .rate-select-layer
+        {
+            color: orange;
+        }
+    </style>
 </head>
 <body>
-    <div class="rate" data-rater-min-value="2"></div>
+    <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
-    <div class="rate"></div>
+    <div class="rate2"></div>
 </body>
 </html>

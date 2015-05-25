@@ -16,6 +16,7 @@
 
         function rate($container, options){
             this.settings = $.extend({}, $.fn.rate.settings, options);
+            this.layers = {};
 
             this.addLayer = function(layer_name, visible_width, symbol, visible)
             {
@@ -44,42 +45,75 @@
 
             this.hover = function(ev)
             {
+                var x = ev.pageX - $($container).offset().left;
+                var visible_width = this.toWidth(this.toValue(x));
+                this.layers.select_layer.css({display: 'none'});
+                this.layers.hover_layer.css({
+                    width: visible_width,
+                    display: 'block'
+                });
+            }
 
+            this.select = function()
+            {
+                var selected_width = this.layers.hover_layer.width();
+                this.layers.select_layer.css({
+                    display: 'block',
+                    width: selected_width,
+                });
+                $($container).attr("data-rate-value", this.toValue(selected_width));
+            }
+
+            this.toWidth = function(val)
+            {
+                return val / this.settings.max_value * this.layers.base_layer.textWidth();
+            }
+
+            this.toValue = function(width)
+            {
+                var val = width / this.layers.base_layer.textWidth() * this.settings.max_value;
+                val = (Math.ceil(val / this.settings.step_size)) * this.settings.step_size;
+                val = val > this.settings.max_value ? this.settings.max_value : val;
+                return val;
             }
 
             this.build = function()
             {
+                /*
+                 * Calculate the selected width based on the initial value
+                 */
+                var selected_width = 0;
+                if ($($container).attr("data-rate-value"))
+                {
+                    selected_width = $($container).attr("data-rate-value")
+                        / this.settings.max_value;
+                }
+
+                /*
+                 * Making the three main layers (base, select, hover)
+                 */
                 var base_layer = this.addLayer("base-layer", 1, this.settings.symbols[
-                    this.settings.selected_symbol_type][0], true);
+                    this.settings.selected_symbol_type]["base"], true);
+
+                var select_layer = this.addLayer("select-layer", selected_width,
+                    this.settings.symbols[this.settings.selected_symbol_type]["selected"], true);
 
                 var hover_layer = this.addLayer("hover-layer", 0, this.settings.symbols[
-                    this.settings.selected_symbol_type][1], false);
+                    this.settings.selected_symbol_type]["hover"], false);
 
-                var select_layer = this.addLayer("hover-layer", 0, this.settings.symbols[
-                    this.settings.selected_symbol_type][1], false);
+                this.layers["base_layer"] = base_layer;
+                this.layers["select_layer"] = select_layer;
+                this.layers["hover_layer"] = hover_layer;
 
-                $($container).bind("mousemove", function(ev){
-                    var x = ev.pageX - $($container).offset().left;
-                    var visible_width = x;
-                    hover_layer.css({
-                        width: visible_width,
-                        display: 'block'
-                    });
-                });
-
+                /*
+                 * Bind the container to some events
+                 */
+                $($container).bind("mousemove", $.proxy(this.hover, this));
+                $($container).bind("click", $.proxy(this.select, this));
                 $($container).bind("mouseout", function(){
-                    hover_layer.css({
-                        display: 'none'
-                    });
+                    hover_layer.css({display: 'none'});
+                    select_layer.css({display: 'block'});
                 });
-
-                $($container).bind("click", function(){
-                    select_layer.css({
-                        display: 'block',
-                        width: hover_layer.width(),
-                    })
-                });
-
             }
 
             this.build();
@@ -88,12 +122,21 @@
 
     $.fn.rate.settings = {
         min_value: 0,
-        max_value: 5,
-        step_size: 1,
+        max_value: 10,
+        step_size: 0.5,
         symbols: {
-            utf8: ['\u2606', '\u2605'],
+            utf8_star: {
+                base: '\u2606',
+                hover: '\u2605',
+                selected: '\u2605',
+            },
+            utf8_florette: {
+                base: '\u2740',
+                hover: '\u273f',
+                selected: '\u273f',
+            },
         },
-        selected_symbol_type: 'utf8',
+        selected_symbol_type: 'utf8_star',
         initial_value: 0,
     };
 
