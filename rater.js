@@ -48,7 +48,7 @@
             {
                 var x = ev.pageX - $($container).offset().left;
                 var val = this.toValue(x);
-                if ($($container).attr("data-rate-value") != val)
+                if ($($container).attr("data-rate-value") != val && !this.settings.readonly)
                 {
                     var visible_width = this.toWidth(val);
                     this.layers.select_layer.css({display: 'none'});
@@ -61,16 +61,23 @@
 
             this.select = function(ev)
             {
-                var x = ev.pageX - $($container).offset().left;
-                var selected_width = this.toWidth(this.toValue(x));
-                this.layers.select_layer.css({
-                    display: 'block',
-                    width: selected_width,
-                });
-                this.layers.hover_layer.css({
-                    display: 'none',
-                });
-                $($container).attr("data-rate-value", this.toValue(selected_width));
+                if (!this.settings.readonly)
+                {
+                    var x = ev.pageX - $($container).offset().left;
+                    var selected_width = this.toWidth(this.toValue(x));
+                    this.layers.select_layer.css({
+                        display: 'block',
+                        width: selected_width,
+                    });
+                    this.layers.hover_layer.css({
+                        display: 'none',
+                    });
+                    $($container).attr("data-rate-value", this.toValue(selected_width));
+                    if (this.settings.change_once)
+                    {
+                        this.settings.readonly = true;
+                    }
+                }
             }
 
             this.toWidth = function(val)
@@ -140,7 +147,7 @@
                 hover: '\u2605',
                 selected: '\u2605',
             },
-            utf8_florette: {
+            utf8_hexagon: {
                 base: '\u2B21',
                 hover: '\u2B22',
                 selected: '\u2B22',
@@ -148,6 +155,8 @@
         },
         selected_symbol_type: 'utf8_star',
         cursor: 'default',
+        readonly: false,
+        change_once: true
     };
 
 }(jQuery));
