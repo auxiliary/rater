@@ -15,5 +15,4 @@ Things to do and ideas
 - ~~options pattern~~
 - remove method
 - extra optional layer for faces, ...
-- low priority: plus, minus buttons for adding, subtracting values. Also keyboard support would be nice. 
-
+- low priority: plus, minus buttons for adding, subtracting values. Also keyboard support would be nice.

@@ -47,12 +47,16 @@
             this.hover = function(ev)
             {
                 var x = ev.pageX - $($container).offset().left;
-                var visible_width = this.toWidth(this.toValue(x));
-                this.layers.select_layer.css({display: 'none'});
-                this.layers.hover_layer.css({
-                    width: visible_width,
-                    display: 'block'
-                });
+                var val = this.toValue(x);
+                if ($($container).attr("data-rate-value") != val)
+                {
+                    var visible_width = this.toWidth(val);
+                    this.layers.select_layer.css({display: 'none'});
+                    this.layers.hover_layer.css({
+                        width: visible_width,
+                        display: 'block'
+                    });
+                }
             }
 
             this.select = function(ev)
@@ -62,6 +66,9 @@
                 this.layers.select_layer.css({
                     display: 'block',
                     width: selected_width,
+                });
+                this.layers.hover_layer.css({
+                    display: 'none',
                 });
                 $($container).attr("data-rate-value", this.toValue(selected_width));
             }
@@ -134,9 +141,9 @@
                 selected: '\u2605',
             },
             utf8_florette: {
-                base: '\u2740',
-                hover: '\u273f',
-                selected: '\u273f',
+                base: '\u2B21',
+                hover: '\u2B22',
+                selected: '\u2B22',
             },
         },
         selected_symbol_type: 'utf8_star',
