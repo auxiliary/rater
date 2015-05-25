@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js" charset="utf-8"></script>
+    <script src="rater.js" charset="utf-8"></script>
+    <script>
+        $(document).ready(function(){
+            var options = {
+                max_value: 10
+            }
+            $(".rate").rate(options);
+        });
+    </script>
+
+</head>
+<body>
+    <div class="rate" data-rater-min-value="2"></div>
+    <div class="rate"></div>
+    <div class="rate"></div>
+</body>
+</html>
