@@ -11,9 +11,13 @@
                 max_value: 7,
                 step_size: 0.2,
                 selected_symbol_type: 'utf8_hexagon',
+                url: 'http://localhost:5000/test',
             }
             $(".rate").rate();
-            $(".rate2").rate(options);
+            console.log($(".rate2").rate(options)).destroy();
+            $(".rate2").on("change", function(ev, data){
+                console.log(data.from, data.to);
+            });
         });
     </script>
 
@@ -22,7 +26,7 @@
         {
             color: #aaa;
         }
-        .rate-select-layer
+        .rate-hover-layer
         {
             color: orange;
         }

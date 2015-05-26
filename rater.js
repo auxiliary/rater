@@ -9,15 +9,19 @@
     }
 
     $.fn.rate = function(options){
-        for (var i = 0; i < $(this).length; i++)
-        {
-            new rate($(this)[i], options);
-        }
+        return this.each(function(){
+            new rate(this, options);
+        });
 
         function rate($container, options){
+            // Extend the default settings with user options
             this.settings = $.extend({}, $.fn.rate.settings, options);
             this.layers = {};
+            this.value = 0;
 
+            /*
+             * Function to add a layer
+             */
             this.addLayer = function(layer_name, visible_width, symbol, visible)
             {
                 var layer_body = "<div>";
@@ -44,11 +48,34 @@
                 return layer;
             }
 
+            this.updateServer = function()
+            {
+                if (this.settings.url != undefined)
+                {
+                    $.ajax({
+                        url: this.settings.url,
+                        type: this.settings.ajax_method,
+                        data: {value: this.getValue()},
+                        success: $.proxy($.fn.rate.updateSuccessCallback, this),
+                        error: $.proxy($.fn.rate.updateErrorCallback, this)
+                    });
+                }
+                else
+                {
+                    console.log("No URL set for rater.");
+                }
+            }
+
+            this.getValue = function()
+            {
+                return this.value;
+            }
+
             this.hover = function(ev)
             {
                 var x = ev.pageX - $($container).offset().left;
                 var val = this.toValue(x);
-                if ($($container).attr("data-rate-value") != val && !this.settings.readonly)
+                if (($($container).attr("data-rate-value") != val) && !this.settings.readonly)
                 {
                     var visible_width = this.toWidth(val);
                     this.layers.select_layer.css({display: 'none'});
@@ -59,12 +86,26 @@
                 }
             }
 
+            /*
+             * Event for when a rating has been selected (clicked)
+             */
             this.select = function(ev)
             {
                 if (!this.settings.readonly)
                 {
+                    var old_value = this.getValue();
                     var x = ev.pageX - $($container).offset().left;
                     var selected_width = this.toWidth(this.toValue(x));
+                    this.value = this.toValue(selected_width);
+
+                    /*
+                     * About to change event, should support prevention later
+                     */
+                    var change_event = $($container).trigger("change", {
+                        "from": old_value,
+                        "to": this.value
+                    });
+
                     this.layers.select_layer.css({
                         display: 'block',
                         width: selected_width,
@@ -72,19 +113,33 @@
                     this.layers.hover_layer.css({
                         display: 'none',
                     });
-                    $($container).attr("data-rate-value", this.toValue(selected_width));
+                    $($container).attr("data-rate-value", this.value);
+
                     if (this.settings.change_once)
                     {
                         this.settings.readonly = true;
                     }
+                    this.updateServer();
                 }
             }
 
+            this.mouseout = function()
+            {
+                this.layers.hover_layer.css({display: 'none'});
+                this.layers.select_layer.css({display: 'block'});
+            }
+
+            /*
+             * Takes a width (px) and returns the value it resembles
+             */
             this.toWidth = function(val)
             {
                 return val / this.settings.max_value * this.layers.base_layer.textWidth();
             }
 
+            /*
+             * Takes a value and calculates the width of the selected/hovered layer
+             */
             this.toValue = function(width)
             {
                 var val = width / this.layers.base_layer.textWidth() * this.settings.max_value;
@@ -126,20 +181,25 @@
                  */
                 $($container).bind("mousemove", $.proxy(this.hover, this));
                 $($container).bind("click", $.proxy(this.select, this));
-                $($container).bind("mouseout", function(){
-                    hover_layer.css({display: 'none'});
-                    select_layer.css({display: 'block'});
-                });
+                $($container).bind("mouseout", $.proxy(this.mouseout, this));
             }
 
             this.build();
         }
     };
 
+    $.fn.rate.updateSuccessCallback = function()
+    {
+        console.log("Rating updated");
+    }
+    $.fn.rate.updateErrorCallback = function(jxhr, msg, err)
+    {
+        console.log("Error in updating the rating value");
+    }
+
     $.fn.rate.settings = {
-        min_value: 0,
         max_value: 10,
-        step_size: 1,
+        step_size: 0.5,
         initial_value: 0,
         symbols: {
             utf8_star: {
@@ -153,10 +213,11 @@
                 selected: '\u2B22',
             },
         },
-        selected_symbol_type: 'utf8_star',
+        selected_symbol_type: 'utf8_star', // Must be a key from symbols
         cursor: 'default',
         readonly: false,
-        change_once: true
+        change_once: false, // Determines if the rating can only be set once
+        ajax_method: 'POST',
     };
 
 }(jQuery));
