@@ -1,2 +1,2 @@
 # rater
-A rating widget with low dependencies
+A rating widget using utf8 glyphs and low dependencies

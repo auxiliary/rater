@@ -11,7 +11,6 @@
                 max_value: 7,
                 step_size: 0.2,
                 selected_symbol_type: 'utf8_hexagon',
-                url: 'http://localhost:5000/test',
             }
             $(".rate").rate();
 
@@ -21,11 +20,7 @@
                 console.log(data.from, data.to);
             });
 
-
-            $("#button").on("click", function(ev){
-                console.log($(".rate").rate("getValue"));
-                return false;
-            });
+            $(".rate2").rate("setFace", 6, '&#9786;');
         });
 
     </script>
@@ -53,7 +48,5 @@
     <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
     <div class="rate2" data-rate-value=5></div>
-
-    <button id="button">Remove</button>
 </body>
 </html>

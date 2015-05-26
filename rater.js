@@ -30,6 +30,7 @@
                 }
                 if (options === 'destroy')
                 {
+                    $(instance.element).off();
                     $.data(this, 'rate', null);
                 }
             });
@@ -42,6 +43,7 @@
     {
         this.element = element;
         this.settings = $.extend({}, $.fn.rate.settings, options);
+        this.set_faces = {}; // value, symbol pairs
         this.build();
     }
 
@@ -82,9 +84,9 @@
         /*
          * Bind the container to some events
          */
-        $(this.element).bind("mousemove", $.proxy(this.hover, this));
-        $(this.element).bind("click", $.proxy(this.select, this));
-        $(this.element).bind("mouseout", $.proxy(this.mouseout, this));
+        $(this.element).on("mousemove", $.proxy(this.hover, this));
+        $(this.element).on("click", $.proxy(this.select, this));
+        $(this.element).on("mouseout", $.proxy(this.mouseout, this));
 
         this.value = this.toValue(selected_width * $(base_layer).textWidth());
     }
@@ -130,10 +132,6 @@
                 error: $.proxy($.fn.rate.updateErrorCallback, this)
             });
         }
-        else
-        {
-            console.log("No URL set for rater.");
-        }
     }
 
     Rate.prototype.getValue = function()
@@ -166,30 +164,7 @@
             var old_value = this.getValue();
             var x = ev.pageX - $(this.element).offset().left;
             var selected_width = this.toWidth(this.toValue(x));
-            this.value = this.toValue(selected_width);
-
-            /*
-             * About to change event, should support prevention later
-             */
-            var change_event = $(this.element).trigger("change", {
-                "from": old_value,
-                "to": this.value
-            });
-
-            this.layers.select_layer.css({
-                display: 'block',
-                width: selected_width,
-            });
-            this.layers.hover_layer.css({
-                display: 'none',
-            });
-            $(this.element).attr("data-rate-value", this.value);
-
-            if (this.settings.change_once)
-            {
-                this.settings.readonly = true;
-            }
-            this.updateServer();
+            this.setValue(this.toValue(selected_width));
         }
     }
 
@@ -220,12 +195,22 @@
 
     Rate.prototype.getElement = function(layer_name, index)
     {
-        return $(this.element).find(".rate-" + layer_name + " span").eq(index);
+        return $(this.element).find(".rate-" + layer_name + " span").eq(index - 1);
     }
 
     Rate.prototype.getLayers = function()
     {
         return this.layers;
+    }
+
+    Rate.prototype.setFace = function(value, face)
+    {
+        this.set_faces[value] = face;
+    }
+
+    Rate.prototype.removeFace = function(value)
+    {
+        delete this.set_faces[value];
     }
 
     Rate.prototype.setValue = function(value)
@@ -243,7 +228,6 @@
 
             var old_value = this.getValue();
             this.value = value;
-            var width = this.toWidth(this.value);
 
             /*
              * About to change event, should support prevention later
@@ -253,12 +237,35 @@
                 "to": this.value
             });
 
+            /*
+             * Set/Reset faces
+             */
+            var index_value = Math.ceil(this.value);
+            if (this.set_faces.hasOwnProperty(index_value))
+            {
+                var el = this.getElement("select-layer", index_value);
+                var face = this.set_faces[index_value];
+                el.html(face);
+
+                var base_el = this.getElement("base-layer", index_value);
+                base_el.html(face);
+                this.layers.base_layer.css({
+                    width: $(this.layers.base_layer).textWidth() + "px",
+                });
+                $(base_el).css({
+                    visibility: "hidden"
+                });
+            }
+
+            var width = this.toWidth(this.value);
             this.layers.select_layer.css({
                 display: 'block',
                 width: width,
+                height: this.layers.base_layer.css("height")
             });
             this.layers.hover_layer.css({
                 display: 'none',
+                height: this.layers.base_layer.css("height")
             });
             $(this.element).attr("data-rate-value", this.value);
 
@@ -305,15 +312,13 @@
                 selected: '\u2B22',
             },
             utf8_emoticons: [
-                '\u1F601',
+                '\u263A',
                 '\u1F603',
                 '\u1F606',
             ],
         },
         selected_symbol_type: 'utf8_star', // Must be a key from symbols
-        face_layer_symbol_type: 'utf8_emoticons',
         cursor: 'default',
-        element_class_name: 'rate-base-layer-element',
         readonly: false,
         change_once: false, // Determines if the rating can only be set once
         ajax_method: 'POST',
