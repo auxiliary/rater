@@ -14,7 +14,9 @@
                 url: 'http://localhost:5000/test',
             }
             $(".rate").rate();
-            console.log($(".rate2").rate(options)).destroy();
+
+            $(".rate2").rate(options);
+
             $(".rate2").on("change", function(ev, data){
                 console.log(data.from, data.to);
             });
@@ -30,11 +32,17 @@
         {
             color: orange;
         }
+        .rate-base-layer-element:hover
+        {
+            border: 1px solid #000;
+        }
     </style>
 </head>
 <body>
     <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
     <div class="rate2" data-rate-value=5></div>
+
+    <button onclick='console.log($(".rate2").rate("getValue")); return false;'>Remove</button>
 </body>
 </html>

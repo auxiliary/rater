@@ -1,4 +1,4 @@
-(function ($){
+;(function ($, window){
     $.fn.textWidth = function(){
         var html_calc = $('<span>' + $(this).html() + '</span>');
         html_calc.css('font-size',$(this).css('font-size')).hide();
@@ -9,11 +9,39 @@
     }
 
     $.fn.rate = function(options){
-        return this.each(function(){
-            new rate(this, options);
-        });
 
-        function rate($container, options){
+        var args = arguments;
+        if (options === undefined || typeof options === 'object')
+        {
+            return this.each(function(){
+                if (!$.data(this, "rate"))
+                {
+                    $.data(this, "rate", new rate(this, options));
+                }
+            });
+        }
+        else if (typeof options === 'string')
+        {
+            var returns;
+
+            this.each(function(){
+                var instance = $.data(this, "rate");
+                if (instance instanceof rate)
+                {
+                    returns = instance[options].apply(Array.prototype.slice.call(args, 1));
+                    console.log(instance[options]);
+                }
+
+                if (options === 'destroy')
+                {
+                    $.data(this, 'rate', null);
+                }
+            });
+
+            return returns !== undefined ? returns : this;
+        }
+
+        function rate(container, options){
             // Extend the default settings with user options
             this.settings = $.extend({}, $.fn.rate.settings, options);
             this.layers = {};
@@ -27,10 +55,10 @@
                 var layer_body = "<div>";
                 for (var i = 0; i < this.settings.max_value; i++)
                 {
-                    layer_body += symbol;
+                    layer_body += "<span>" + symbol + "</span>";
                 }
                 layer_body += "</div>";
-                var layer = $(layer_body).addClass("rate-" + layer_name).appendTo($container);
+                var layer = $(layer_body).addClass("rate-" + layer_name).appendTo(container);
 
                 $(layer).css({
                     width: visible_width * $(layer).textWidth() + "px",
@@ -39,7 +67,7 @@
                     top: 0,
                     display: visible ? 'block' : 'none'
                 });
-                $($container).css({
+                $(container).css({
                     height: $(layer).height(),
                     position: 'relative',
                     cursor: this.settings.cursor,
@@ -73,9 +101,9 @@
 
             this.hover = function(ev)
             {
-                var x = ev.pageX - $($container).offset().left;
+                var x = ev.pageX - $(container).offset().left;
                 var val = this.toValue(x);
-                if (($($container).attr("data-rate-value") != val) && !this.settings.readonly)
+                if (($(container).attr("data-rate-value") != val) && !this.settings.readonly)
                 {
                     var visible_width = this.toWidth(val);
                     this.layers.select_layer.css({display: 'none'});
@@ -94,14 +122,14 @@
                 if (!this.settings.readonly)
                 {
                     var old_value = this.getValue();
-                    var x = ev.pageX - $($container).offset().left;
+                    var x = ev.pageX - $(container).offset().left;
                     var selected_width = this.toWidth(this.toValue(x));
                     this.value = this.toValue(selected_width);
 
                     /*
                      * About to change event, should support prevention later
                      */
-                    var change_event = $($container).trigger("change", {
+                    var change_event = $(container).trigger("change", {
                         "from": old_value,
                         "to": this.value
                     });
@@ -113,7 +141,7 @@
                     this.layers.hover_layer.css({
                         display: 'none',
                     });
-                    $($container).attr("data-rate-value", this.value);
+                    $(container).attr("data-rate-value", this.value);
 
                     if (this.settings.change_once)
                     {
@@ -154,9 +182,9 @@
                  * Calculate the selected width based on the initial value
                  */
                 var selected_width = 0;
-                if ($($container).attr("data-rate-value"))
+                if ($(container).attr("data-rate-value"))
                 {
-                    selected_width = $($container).attr("data-rate-value")
+                    selected_width = $(container).attr("data-rate-value")
                         / this.settings.max_value;
                 }
 
@@ -172,6 +200,9 @@
                 var hover_layer = this.addLayer("hover-layer", 0, this.settings.symbols[
                     this.settings.selected_symbol_type]["hover"], false);
 
+                /* var face_layer = this.addLayer("face-layer", 1, this.settings
+                    .symbols[this.settings.face_layer_symbol_type][0], true); */
+
                 this.layers["base_layer"] = base_layer;
                 this.layers["select_layer"] = select_layer;
                 this.layers["hover_layer"] = hover_layer;
@@ -179,9 +210,11 @@
                 /*
                  * Bind the container to some events
                  */
-                $($container).bind("mousemove", $.proxy(this.hover, this));
-                $($container).bind("click", $.proxy(this.select, this));
-                $($container).bind("mouseout", $.proxy(this.mouseout, this));
+                $(container).bind("mousemove", $.proxy(this.hover, this));
+                $(container).bind("click", $.proxy(this.select, this));
+                $(container).bind("mouseout", $.proxy(this.mouseout, this));
+
+                this.value = this.toValue(selected_width * $(base_layer).textWidth());
             }
 
             this.build();
@@ -190,7 +223,7 @@
 
     $.fn.rate.updateSuccessCallback = function()
     {
-        console.log("Rating updated");
+
     }
     $.fn.rate.updateErrorCallback = function(jxhr, msg, err)
     {
@@ -212,12 +245,19 @@
                 hover: '\u2B22',
                 selected: '\u2B22',
             },
+            utf8_emoticons: [
+                '\u1F601',
+                '\u1F603',
+                '\u1F606',
+            ],
         },
         selected_symbol_type: 'utf8_star', // Must be a key from symbols
+        face_layer_symbol_type: 'utf8_emoticons',
         cursor: 'default',
+        element_class_name: 'rate-base-layer-element',
         readonly: false,
         change_once: false, // Determines if the rating can only be set once
         ajax_method: 'POST',
     };
 
-}(jQuery));
+}(jQuery, window));
