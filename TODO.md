@@ -11,7 +11,7 @@ Things to do and ideas
 - ~~Easy rate get/set~~
 - ~~Set dynamic value for the stars (3 and 1/3 of stars full) when showing poll results~~
 - Flexible options for different images, glyphs, svg, ...
-- Tooltip support
+- ~~Tooltip support~~
 - ~~Use trigger and call an event when it's about to change~~
 
 - ~~options pattern~~

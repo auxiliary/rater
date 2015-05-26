@@ -20,7 +20,14 @@
             $(".rate2").on("change", function(ev, data){
                 console.log(data.from, data.to);
             });
+
+
+            $("#button").on("click", function(ev){
+                console.log($(".rate").rate("getValue"));
+                return false;
+            });
         });
+
     </script>
 
     <style>
@@ -36,6 +43,10 @@
         {
             border: 1px solid #000;
         }
+        .pink
+        {
+            color: pink;
+        }
     </style>
 </head>
 <body>
@@ -43,6 +54,6 @@
     <div class="rate"></div>
     <div class="rate2" data-rate-value=5></div>
 
-    <button onclick='console.log($(".rate2").rate("getValue")); return false;'>Remove</button>
+    <button id="button">Remove</button>
 </body>
 </html>
