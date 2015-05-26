@@ -1,2 +1,35 @@
 # rater
 A rating widget using utf8 glyphs and low dependencies
+
+#### Simple usage
+
+```javascript
+$(".rating").rate(options);
+```
+
+#### Useful methods
+
+```javascript
+$(".rating").rate("getValue");
+$(".rating").rate("setValue");
+$(".rating").rate("increment");
+$(".rating").rate("decrement");
+$(".rating").rate("getElement", layer_name, element_index);
+$(".rating").rate("getLayers");
+$(".rating").rate("setFace", value, face);
+$(".rating").rate("removeFace", value);
+```
+
+#### Useful events
+```javascript
+$(".rating").on("change", function(ev, data){
+  console.log(data.from, data.to);
+});
+```
+
+#### Deleting
+
+```javascript
+$(".rating").rate("destroy");
+$(".rating").remove(); //This will remove the elements from the DOM
+```
