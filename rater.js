@@ -233,6 +233,7 @@
             var pad = parseInt($(this.element).css("padding-left").replace("px", ""));
             var x = ev.pageX - $(this.element).offset().left - pad;
             var selected_width = this.toWidth(this.toValue(x, true));
+            console.log(selected_width);
             this.setValue(this.toValue(selected_width));
             this.raise_select_layer = true;
         }
@@ -269,15 +270,14 @@
 
         // Make sure the division doesn't cause some small numbers added by
         // comparing to a small arbitrary number.
-        if (Math.abs(val - Math.floor(val) < 0.00005))
+        var temp = val / this.settings.step_size;
+        if (temp - Math.floor(temp) < 0.00005)
         {
-            val = Math.floor(val);
+            val = Math.round(val / this.settings.step_size) * this.settings.step_size;
         }
         val = (Math.ceil(val / this.settings.step_size)) * this.settings.step_size;
-
         val = val > this.settings.max_value ? this.settings.max_value : val;
         return val;
-
     }
 
     Rate.prototype.getElement = function(layer_name, index)
