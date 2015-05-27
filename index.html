@@ -13,7 +13,6 @@
                 selected_symbol_type: 'utf8_hexagon',
                 url: 'http://localhost/test.php',
                 initial_value: 3,
-
             }
             $(".rate").rate();
 
@@ -34,6 +33,14 @@
 
             $(".rate2").rate("setFace", 7, '😊');
             $(".rate2").rate("setFace", 1, '😒');
+
+            var options3 = {
+                selected_symbol_type: 'utf8_emoticons',
+                max_value: 4,
+                step_size: 1,
+                convert_to_utf8: true,
+            };
+            $("#rate3").rate(options3);
         });
 
     </script>
@@ -57,5 +64,7 @@
     <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
     <div class="rate2"></div>
+
+    <div id="rate3"></div>
 </body>
 </html>

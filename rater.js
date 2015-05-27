@@ -3,7 +3,8 @@
  * https://github.com/auxiliary/rater
  */
 ;(function ($, window){
-    $.fn.textWidth = function(){
+    $.fn.textWidth = function()
+    {
         var html_calc = $('<span>' + $(this).html() + '</span>');
         html_calc.css('font-size',$(this).css('font-size')).hide();
         html_calc.prependTo('body');
@@ -12,7 +13,8 @@
         return width;
     }
 
-    $.fn.textHeight = function(){
+    $.fn.textHeight = function()
+    {
         var html_calc = $('<span>' + $(this).html() + '</span>');
         html_calc.css('font-size',$(this).css('font-size')).hide();
         html_calc.prependTo('body');
@@ -21,7 +23,22 @@
         return height;
     }
 
-    $.fn.rate = function(options){
+    String.prototype.getCodePointLength = function() {
+        return this.length-this.split(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).length+1;
+    };
+
+    String.fromCodePoint= function() {
+        var chars= Array.prototype.slice.call(arguments);
+        for (var i= chars.length; i-->0;) {
+            var n = chars[i]-0x10000;
+            if (n>=0)
+                chars.splice(i, 1, 0xD800+(n>>10), 0xDC00+(n&0x3FF));
+        }
+        return String.fromCharCode.apply(null, chars);
+    };
+
+    $.fn.rate = function(options)
+    {
         if (options === undefined || typeof options === 'object')
         {
             return this.each(function(){
@@ -112,9 +129,20 @@
         /*
          * Add 5px padding to the element so that selecting 0 can be easier
          */
-         $(this.element).css({
+        $(this.element).css({
             'padding-left': '5px'
-         });
+        });
+
+        var real_single_element_width = this.getElement('base-layer', 1)
+            .get(0).getBoundingClientRect().width;
+
+        this.character_size_adjuster =
+            real_single_element_width - Math.floor(real_single_element_width) > 0.5 ? 1 : 0;
+
+        $(this.layers.base_layer).css({
+            width: parseFloat($(this.layers.base_layer).css("width").replace("px", ""))
+                + this.character_size_adjuster
+        });
     }
 
     /*
@@ -125,13 +153,29 @@
         var layer_body = "<div>";
         for (var i = 0; i < this.settings.max_value; i++)
         {
-            layer_body += "<span>" + symbol + "</span>";
+            if (Array.isArray(symbol))
+            {
+                if (this.settings.convert_to_utf8)
+                {
+                    symbol[i] = String.fromCodePoint(symbol[i]);
+                }
+                layer_body += "<span>" + (symbol[i]) + "</span>";
+            }
+            else
+            {
+                if (this.settings.convert_to_utf8)
+                {
+                    symbol = String.fromCodePoint(symbol);
+                }
+                layer_body += "<span>" + symbol + "</span>";
+            }
         }
         layer_body += "</div>";
         var layer = $(layer_body).addClass("rate-" + layer_name).appendTo(this.element);
 
         $(layer).css({
             width: visible_width * $(layer).textWidth() + "px",
+            height: $(layer).textHeight(),
             overflow: 'hidden',
             position: 'absolute',
             top: 0,
@@ -185,7 +229,7 @@
             var visible_width = this.toWidth(val);
             this.layers.select_layer.css({display: 'none'});
             this.layers.hover_layer.css({
-                width: visible_width,
+                width: visible_width + this.character_size_adjuster,
                 display: 'block'
             });
         }
@@ -334,7 +378,7 @@
             var width = this.toWidth(this.value);
             this.layers.select_layer.css({
                 display: 'block',
-                width: width,
+                width: width + this.character_size_adjuster,
                 height: this.layers.base_layer.css("height")
             });
             this.layers.hover_layer.css({
@@ -362,7 +406,7 @@
     }
 
     $.fn.rate.settings = {
-        max_value: 10,
+        max_value: 5,
         step_size: 0.5,
         initial_value: 0,
         symbols: {
@@ -376,13 +420,14 @@
                 hover: '\u2B22',
                 selected: '\u2B22',
             },
-            utf8_emoticons: [
-                '\u263A',
-                '\u1F603',
-                '\u1F606',
-            ],
+            utf8_emoticons: {
+                base: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
+                hover: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
+                selected: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
+            },
         },
         selected_symbol_type: 'utf8_star', // Must be a key from symbols
+        convert_to_utf8: false,
         cursor: 'default',
         readonly: false,
         change_once: false, // Determines if the rating can only be set once
