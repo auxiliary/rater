@@ -133,6 +133,11 @@
             'padding-left': '5px'
         });
 
+        /*
+         * The following hack is needed because some single element widths get rounded
+         * by jQuery's width() function and don't add up properly.
+         * BTW, we can't use getBoundingClientRect because we haven't drawn anything
+         */
         var real_single_element_width = this.getElement('base-layer', 1)
             .get(0).getBoundingClientRect().width;
 
