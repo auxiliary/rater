@@ -11,7 +11,7 @@
                 max_value: 7,
                 step_size: 0.25,
                 selected_symbol_type: 'utf8_hexagon',
-                url: 'http://127.0.0.1:8080/'
+                url: 'http://localhost/test.php'
             }
             $(".rate").rate();
 
@@ -23,6 +23,11 @@
 
             $(".rate2").on("updateError", function(ev, jxhr, msg, err){
                 console.log("This is a custom error event");
+            });
+
+            $(".rate2").rate("setAdditionalData", {id: 42});
+            $(".rate2").on("updateSuccess", function(ev, data){
+                console.log(data);
             });
 
             $(".rate2").rate("setFace", 6, '&#9786;');

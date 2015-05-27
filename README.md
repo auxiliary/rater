@@ -18,6 +18,10 @@ $(".rating").rate("getElement", layer_name, element_index);
 $(".rating").rate("getLayers");
 $(".rating").rate("setFace", value, face);
 $(".rating").rate("removeFace", value);
+
+// Set additional information to be sent with the ajax request
+$(".rate2").rate("setAdditionalData", {id: 42});
+$(".rate2").rate("getAdditionalData");
 ```
 
 #### Useful events
