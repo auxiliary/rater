@@ -21,6 +21,12 @@ var options = {
 $(".rating").rate(options);
 ```
 
+The data-rate-value attribute is optional. The value will fallback to the initial
+value in the settings and to 0 if not provided.
+```html
+<div class="rating" data-rate-value=6></div>
+```
+
 #### Useful methods
 
 ```javascript

@@ -43,6 +43,7 @@
                 }
                 if (options === 'destroy')
                 {
+                    // Unbind all events and empty the plugin data from instance
                     $(instance.element).off();
                     $.data(this, 'rate', null);
                 }
@@ -104,7 +105,7 @@
          */
         $(this.element).on("mousemove", $.proxy(this.hover, this));
         $(this.element).on("click", $.proxy(this.select, this));
-        $(this.element).on("mouseout", $.proxy(this.mouseout, this));
+        $(this.element).on("mouseleave", $.proxy(this.mouseout, this));
 
         this.value = this.toValue(selected_width * $(base_layer).textWidth());
     }
