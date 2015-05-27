@@ -192,7 +192,14 @@
     Rate.prototype.toValue = function(width)
     {
         var val = width / this.layers.base_layer.textWidth() * this.settings.max_value;
+        // Make sure the division doesn't cause some small numbers added by
+        // comparing to a small arbitrary number.
+        if (Math.abs(val - Math.floor(val) < 0.00005))
+        {
+            val = Math.floor(val);
+        }
         val = (Math.ceil(val / this.settings.step_size)) * this.settings.step_size;
+
         val = val > this.settings.max_value ? this.settings.max_value : val;
         return val;
     }
