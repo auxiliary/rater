@@ -9,7 +9,7 @@
         $(document).ready(function(){
             var options = {
                 max_value: 7,
-                step_size: 0.25,
+                step_size: 1,
                 selected_symbol_type: 'utf8_hexagon',
                 url: 'http://localhost/test.php'
             }
@@ -30,7 +30,8 @@
                 console.log(data);
             });
 
-            $(".rate2").rate("setFace", 6, '&#9786;');
+            $(".rate2").rate("setFace", 7, '😊');
+            $(".rate2").rate("setFace", 1, '😒');
         });
 
     </script>

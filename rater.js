@@ -1,3 +1,7 @@
+/*
+ * A rating widget using utf8 glyphs and low dependencies
+ * https://github.com/auxiliary/rater
+ */
 ;(function ($, window){
     $.fn.textWidth = function(){
         var html_calc = $('<span>' + $(this).html() + '</span>');
@@ -269,15 +273,39 @@
             /*
              * Set/Reset faces
              */
+            $(this.element).find(".rate-face").remove();
+            $(this.element).find("span").css({
+                visibility: 'visible'
+            });
             var index_value = Math.ceil(this.value);
             if (this.set_faces.hasOwnProperty(index_value))
             {
                 var face = "<div>" + this.set_faces[index_value] + "</div>";
+                var base_layer_element = this.getElement('base-layer', index_value);
+                var select_layer_element = this.getElement('select-layer', index_value);
+                var hover_layer_element = this.getElement('hover-layer', index_value);
+
+                var left_pos = base_layer_element.textWidth() * (index_value - 1)
+                    + (base_layer_element.textWidth() - $(face).textWidth()) / 2;
                 $(face).appendTo(this.element).css({
-                    display: 'inline-block'
+                    display: 'inline-block',
+                    position: 'absolute',
+                    left: left_pos
+                }).addClass("rate-face");
+                base_layer_element.css({
+                    visibility: 'hidden'
+                });
+                select_layer_element.css({
+                    visibility: 'hidden'
+                });
+                hover_layer_element.css({
+                    visibility: 'hidden'
                 });
             }
 
+            /*
+             * Set styles based on width and value
+             */
             var width = this.toWidth(this.value);
             this.layers.select_layer.css({
                 display: 'block',
