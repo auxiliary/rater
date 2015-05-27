@@ -12,6 +12,15 @@
         return width;
     }
 
+    $.fn.textHeight = function(){
+        var html_calc = $('<span>' + $(this).html() + '</span>');
+        html_calc.css('font-size',$(this).css('font-size')).hide();
+        html_calc.prependTo('body');
+        var height = html_calc.height();
+        html_calc.remove();
+        return height;
+    }
+
     $.fn.rate = function(options){
         if (options === undefined || typeof options === 'object')
         {
@@ -57,15 +66,19 @@
         this.value = 0;
         this.raise_select_layer = false;
 
+        if (this.settings.initial_value)
+        {
+            this.value = this.settings.initial_value;
+        }
+        if ($(this.element).attr("data-rate-value"))
+        {
+            this.value = $(this.element).attr("data-rate-value");
+        }
+
         /*
          * Calculate the selected width based on the initial value
          */
-        var selected_width = 0;
-        if ($(this.element).attr("data-rate-value"))
-        {
-            selected_width = $(this.element).attr("data-rate-value")
-                / this.settings.max_value;
-        }
+        var selected_width = this.value / this.settings.max_value;
 
         /*
          * Making the three main layers (base, select, hover)
@@ -287,11 +300,13 @@
 
                 var left_pos = base_layer_element.textWidth() * (index_value - 1)
                     + (base_layer_element.textWidth() - $(face).textWidth()) / 2;
+
                 $(face).appendTo(this.element).css({
                     display: 'inline-block',
                     position: 'absolute',
-                    left: left_pos
+                    left: left_pos,
                 }).addClass("rate-face");
+
                 base_layer_element.css({
                     visibility: 'hidden'
                 });

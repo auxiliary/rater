@@ -11,7 +11,9 @@
                 max_value: 7,
                 step_size: 1,
                 selected_symbol_type: 'utf8_hexagon',
-                url: 'http://localhost/test.php'
+                url: 'http://localhost/test.php',
+                initial_value: 3,
+
             }
             $(".rate").rate();
 
@@ -53,11 +55,15 @@
         {
             color: pink;
         }
+        .rate-face
+        {
+            font-size: 0.8em;
+        }
     </style>
 </head>
 <body>
     <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
-    <div class="rate2" data-rate-value=5></div>
+    <div class="rate2"></div>
 </body>
 </html>
