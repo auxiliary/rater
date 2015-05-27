@@ -23,6 +23,9 @@
         return height;
     }
 
+    /*
+     * Utf-32 isn't supported by default, so we have to use Utf-8 surrogates
+     */
     String.prototype.getCodePointLength = function() {
         return this.length-this.split(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).length+1;
     };
@@ -96,12 +99,12 @@
         /*
          * Calculate the selected width based on the initial value
          */
-        var selected_width = this.value / this.settings.max_value;
+        var selected_width = this.value / this.settings.max_value * 100;
 
         /*
          * Making the three main layers (base, select, hover)
          */
-        var base_layer = this.addLayer("base-layer", 1, this.settings.symbols[
+        var base_layer = this.addLayer("base-layer", 100, this.settings.symbols[
             this.settings.selected_symbol_type]["base"], true);
 
         var select_layer = this.addLayer("select-layer", selected_width,
@@ -125,29 +128,6 @@
         $(this.element).on("mouseleave", $.proxy(this.mouseout, this));
 
         this.value = this.toValue(selected_width * $(base_layer).textWidth());
-
-        /*
-         * Add 5px padding to the element so that selecting 0 can be easier
-         */
-        $(this.element).css({
-            'padding-left': '5px'
-        });
-
-        /*
-         * The following hack is needed because some single element widths get rounded
-         * by jQuery's width() function and don't add up properly.
-         * BTW, we can't use getBoundingClientRect because we haven't drawn anything
-         */
-        var real_single_element_width = this.getElement('base-layer', 1)
-            .get(0).getBoundingClientRect().width;
-
-        this.character_size_adjuster =
-            real_single_element_width - Math.floor(real_single_element_width) > 0.5 ? 1 : 0;
-
-        $(this.layers.base_layer).css({
-            width: parseFloat($(this.layers.base_layer).css("width").replace("px", ""))
-                + this.character_size_adjuster
-        });
     }
 
     /*
@@ -179,7 +159,7 @@
         var layer = $(layer_body).addClass("rate-" + layer_name).appendTo(this.element);
 
         $(layer).css({
-            width: visible_width * $(layer).textWidth() + "px",
+            width: visible_width + "%",
             height: $(layer).textHeight(),
             overflow: 'hidden',
             position: 'absolute',
@@ -187,6 +167,7 @@
             display: visible ? 'block' : 'none'
         });
         $(this.element).css({
+            width: $(layer).textWidth() + "px",
             height: $(layer).height(),
             position: 'relative',
             cursor: this.settings.cursor,
@@ -222,7 +203,7 @@
     {
         var pad = parseInt($(this.element).css("padding-left").replace("px", ""));
         var x = ev.pageX - $(this.element).offset().left - pad;
-        var val = this.toValue(x);
+        var val = this.toValue(x, true);
 
         if (val != this.value)
         {
@@ -232,9 +213,10 @@
         if (!this.raise_select_layer && !this.settings.readonly)
         {
             var visible_width = this.toWidth(val);
+
             this.layers.select_layer.css({display: 'none'});
             this.layers.hover_layer.css({
-                width: visible_width + this.character_size_adjuster,
+                width: visible_width + "%",
                 display: 'block'
             });
         }
@@ -250,7 +232,7 @@
             var old_value = this.getValue();
             var pad = parseInt($(this.element).css("padding-left").replace("px", ""));
             var x = ev.pageX - $(this.element).offset().left - pad;
-            var selected_width = this.toWidth(this.toValue(x));
+            var selected_width = this.toWidth(this.toValue(x, true));
             this.setValue(this.toValue(selected_width));
             this.raise_select_layer = true;
         }
@@ -267,15 +249,24 @@
      */
     Rate.prototype.toWidth = function(val)
     {
-        return val / this.settings.max_value * this.layers.base_layer.textWidth();
+        return val / this.settings.max_value * 100;
     }
 
     /*
      * Takes a value and calculates the width of the selected/hovered layer
      */
-    Rate.prototype.toValue = function(width)
+    Rate.prototype.toValue = function(width, in_pixels)
     {
-        var val = width / this.layers.base_layer.textWidth() * this.settings.max_value;
+        var val;
+        if (in_pixels)
+        {
+            val = width / this.layers.base_layer.textWidth() * this.settings.max_value;
+        }
+        else
+        {
+            val = width / 100 * this.settings.max_value;
+        }
+
         // Make sure the division doesn't cause some small numbers added by
         // comparing to a small arbitrary number.
         if (Math.abs(val - Math.floor(val) < 0.00005))
@@ -286,6 +277,7 @@
 
         val = val > this.settings.max_value ? this.settings.max_value : val;
         return val;
+
     }
 
     Rate.prototype.getElement = function(layer_name, index)
@@ -383,7 +375,7 @@
             var width = this.toWidth(this.value);
             this.layers.select_layer.css({
                 display: 'block',
-                width: width + this.character_size_adjuster,
+                width: width + "%",
                 height: this.layers.base_layer.css("height")
             });
             this.layers.hover_layer.css({
@@ -424,6 +416,11 @@
                 base: '\u2B21',
                 hover: '\u2B22',
                 selected: '\u2B22',
+            },
+            hearts: {
+                base: '&hearts;',
+                hover: '&hearts;',
+                selected: '&hearts;',
             },
             utf8_emoticons: {
                 base: [0x1F625, 0x1F613, 0x1F612, 0x1F604],

@@ -8,9 +8,9 @@
     <script>
         $(document).ready(function(){
             var options = {
-                max_value: 7,
-                step_size: 1,
-                selected_symbol_type: 'utf8_hexagon',
+                max_value: 6,
+                step_size: 0.5,
+                selected_symbol_type: 'hearts',
                 url: 'http://localhost/test.php',
                 initial_value: 3,
             }
@@ -31,8 +31,8 @@
                 console.log(data);
             });
 
-            $(".rate2").rate("setFace", 7, '😊');
-            $(".rate2").rate("setFace", 1, '😒');
+            $(".rate").rate("setFace", 5, '😊');
+            $(".rate").rate("setFace", 1, '😒');
 
             var options3 = {
                 selected_symbol_type: 'utf8_emoticons',
@@ -54,9 +54,17 @@
         {
             color: orange;
         }
-        .pink
+        .rate2
+        {
+            font-size: 35px;
+        }
+        .rate2 .rate-hover-layer
         {
             color: pink;
+        }
+        .rate2 .rate-select-layer
+        {
+            color: red;
         }
     </style>
 </head>
