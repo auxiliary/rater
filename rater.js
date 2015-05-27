@@ -108,6 +108,13 @@
         $(this.element).on("mouseleave", $.proxy(this.mouseout, this));
 
         this.value = this.toValue(selected_width * $(base_layer).textWidth());
+
+        /*
+         * Add 5px padding to the element so that selecting 0 can be easier
+         */
+         $(this.element).css({
+            'padding-left': '5px'
+         });
     }
 
     /*
@@ -164,7 +171,8 @@
 
     Rate.prototype.hover = function(ev)
     {
-        var x = ev.pageX - $(this.element).offset().left;
+        var pad = parseInt($(this.element).css("padding-left").replace("px", ""));
+        var x = ev.pageX - $(this.element).offset().left - pad;
         var val = this.toValue(x);
 
         if (val != this.value)
@@ -191,7 +199,8 @@
         if (!this.settings.readonly)
         {
             var old_value = this.getValue();
-            var x = ev.pageX - $(this.element).offset().left;
+            var pad = parseInt($(this.element).css("padding-left").replace("px", ""));
+            var x = ev.pageX - $(this.element).offset().left - pad;
             var selected_width = this.toWidth(this.toValue(x));
             this.setValue(this.toValue(selected_width));
             this.raise_select_layer = true;
