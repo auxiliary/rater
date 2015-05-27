@@ -127,7 +127,7 @@
             $.ajax({
                 url: this.settings.url,
                 type: this.settings.ajax_method,
-                data: { value: this.getValue() },
+                data: $.extend({}, { value: this.getValue() }, this.settings.additional_data),
                 success: $.proxy(function(data){
                     $(this.element).trigger("updateSuccess", [data]);
                 }, this),
@@ -210,6 +210,16 @@
     Rate.prototype.setFace = function(value, face)
     {
         this.set_faces[value] = face;
+    }
+
+    Rate.prototype.setAdditionalData = function(data)
+    {
+        this.settings.additional_data = data;
+    }
+
+    Rate.prototype.getAdditionalData = function()
+    {
+        return this.settings.additional_data;
     }
 
     Rate.prototype.removeFace = function(value)
@@ -309,6 +319,7 @@
         readonly: false,
         change_once: false, // Determines if the rating can only be set once
         ajax_method: 'POST',
+        additional_data: {} // Additional data to send to the server
     };
 
 }(jQuery, window));
