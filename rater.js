@@ -127,9 +127,13 @@
             $.ajax({
                 url: this.settings.url,
                 type: this.settings.ajax_method,
-                data: {value: this.getValue()},
-                success: $.proxy($.fn.rate.updateSuccessCallback, this),
-                error: $.proxy($.fn.rate.updateErrorCallback, this)
+                data: { value: this.getValue() },
+                success: $.proxy(function(data){
+                    $(this.element).trigger("updateSuccess", [data]);
+                }, this),
+                error: $.proxy(function(jxhr, msg, err){
+                    $(this.element).trigger("updateError", [jxhr, msg, err]);
+                }, this)
             });
         }
     }
@@ -243,17 +247,9 @@
             var index_value = Math.ceil(this.value);
             if (this.set_faces.hasOwnProperty(index_value))
             {
-                var el = this.getElement("select-layer", index_value);
-                var face = this.set_faces[index_value];
-                el.html(face);
-
-                var base_el = this.getElement("base-layer", index_value);
-                base_el.html(face);
-                this.layers.base_layer.css({
-                    width: $(this.layers.base_layer).textWidth() + "px",
-                });
-                $(base_el).css({
-                    visibility: "hidden"
+                var face = "<div>" + this.set_faces[index_value] + "</div>";
+                $(face).appendTo(this.element).css({
+                    display: 'inline-block'
                 });
             }
 
@@ -285,15 +281,6 @@
     Rate.prototype.decrement = function()
     {
         this.setValue(this.getValue() - this.settings.step_size);
-    }
-
-    $.fn.rate.updateSuccessCallback = function()
-    {
-
-    }
-    $.fn.rate.updateErrorCallback = function(jxhr, msg, err)
-    {
-        console.log("Error in updating the rating value");
     }
 
     $.fn.rate.settings = {

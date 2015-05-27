@@ -15,6 +15,6 @@ Things to do and ideas
 - ~~Use trigger and call an event when it's about to change~~
 
 - ~~options pattern~~
-- remove method
+- ~remove method~
 - extra optional layer for faces, ...
 - ~~low priority: plus, minus buttons for adding, subtracting values. Also keyboard support would be nice.~~

@@ -9,8 +9,9 @@
         $(document).ready(function(){
             var options = {
                 max_value: 7,
-                step_size: 0.2,
+                step_size: 0.25,
                 selected_symbol_type: 'utf8_hexagon',
+                url: 'http://localhost'
             }
             $(".rate").rate();
 
@@ -18,6 +19,10 @@
 
             $(".rate2").on("change", function(ev, data){
                 console.log(data.from, data.to);
+            });
+
+            $(".rate2").on("updateError", function(ev, jxhr, msg, err){
+                console.log("This is a custom error event");
             });
 
             $(".rate2").rate("setFace", 6, '&#9786;');

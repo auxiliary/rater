@@ -25,6 +25,14 @@ $(".rating").rate("removeFace", value);
 $(".rating").on("change", function(ev, data){
   console.log(data.from, data.to);
 });
+
+$(".rate2").on("updateSuccess", function(ev, data){
+    console.log("This is a custom success event");
+});
+
+$(".rate2").on("updateError", function(ev, jxhr, msg, err){
+    console.log("This is a custom error event");
+});
 ```
 
 #### Deleting
