@@ -51,6 +51,7 @@
     {
         this.layers = {};
         this.value = 0;
+        this.raise_select_layer = false;
 
         /*
          * Calculate the selected width based on the initial value
@@ -147,7 +148,13 @@
     {
         var x = ev.pageX - $(this.element).offset().left;
         var val = this.toValue(x);
-        if (($(this.element).attr("data-rate-value") != val) && !this.settings.readonly)
+
+        if (val != this.value)
+        {
+            this.raise_select_layer = false;
+        }
+
+        if (!this.raise_select_layer && !this.settings.readonly)
         {
             var visible_width = this.toWidth(val);
             this.layers.select_layer.css({display: 'none'});
@@ -169,6 +176,7 @@
             var x = ev.pageX - $(this.element).offset().left;
             var selected_width = this.toWidth(this.toValue(x));
             this.setValue(this.toValue(selected_width));
+            this.raise_select_layer = true;
         }
     }
 
