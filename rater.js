@@ -10,17 +10,31 @@
         html_calc.prependTo('body');
         var width = html_calc.width();
         html_calc.remove();
+
+        if (width == 0)
+        {
+            var total = 0;
+            $(this).eq(0).children().each(function(){
+                total += $(this).textWidth();
+            });
+            return total;
+        }
         return width;
     }
 
     $.fn.textHeight = function()
     {
+        return $(this).height();
+
+        // Should be removed after testing
+        /*
         var html_calc = $('<span>' + $(this).html() + '</span>');
         html_calc.css('font-size',$(this).css('font-size')).hide();
         html_calc.prependTo('body');
         var height = html_calc.height();
         html_calc.remove();
         return height;
+        */
     }
 
     /*
@@ -160,7 +174,7 @@
 
         $(layer).css({
             width: visible_width + "%",
-            height: $(layer).textHeight(),
+            height: $(layer).children().eq(0).textHeight(),
             overflow: 'hidden',
             position: 'absolute',
             top: 0,
@@ -421,6 +435,16 @@
                 base: '&hearts;',
                 hover: '&hearts;',
                 selected: '&hearts;',
+            },
+            fontawesome_test: {
+                base: '<i class="fa fa-life-ring"></i>',
+                hover: '<i class="fa fa-life-ring"></i>',
+                selected: '<i class="fa fa-life-ring"></i>',
+            },
+            image: {
+                base: '<div class="im">&nbsp;</div>',
+                hover: '<div class="im">&nbsp;</div>',
+                selected: '<div class="im">&nbsp;</div>',
             },
             utf8_emoticons: {
                 base: [0x1F625, 0x1F613, 0x1F612, 0x1F604],

@@ -6,7 +6,9 @@
     <script src="http://code.jquery.com/jquery-1.11.3.min.js" charset="utf-8"></script>
     <script src="rater.js" charset="utf-8"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(
+        setTimeout(
+        function(){
             var options = {
                 max_value: 6,
                 step_size: 0.5,
@@ -41,7 +43,19 @@
                 convert_to_utf8: true,
             };
             $("#rate3").rate(options3);
-        });
+
+            $("#rate4").rate({
+                selected_symbol_type: 'fontawesome_test',
+                max_value: 5,
+                step_size: 1,
+            });
+
+            $("#rate5").rate({
+                selected_symbol_type: 'image',
+                max_value: 5,
+                step_size: 1,
+            });
+        }), 5000);
 
     </script>
 
@@ -66,13 +80,28 @@
         {
             color: red;
         }
+        .im
+        {
+            background-image: url('./images/heart.gif');
+            background-size: 16px 16px;
+            background-repeat: no-repeat;
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+        }
+        #rate5 .rate-base-layer span
+        {
+            opacity: 0.5;
+        }
     </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body>
     <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
     <div class="rate2"></div>
-
     <div id="rate3"></div>
+    <div id="rate4"></div>
+    <div id="rate5"></div>
 </body>
 </html>
