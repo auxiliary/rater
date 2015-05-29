@@ -248,7 +248,6 @@
             var pad = parseInt($(this.element).css("padding-left").replace("px", ""));
             var x = ev.pageX - $(this.element).offset().left - pad;
             var selected_width = this.toWidth(this.toValue(x, true));
-            console.log(selected_width);
             this.setValue(this.toValue(selected_width));
             this.raise_select_layer = true;
         }
@@ -437,10 +436,15 @@
                 hover: '&hearts;',
                 selected: '&hearts;',
             },
-            fontawesome_test: {
-                base: '<i class="fa fa-life-ring"></i>',
-                hover: '<i class="fa fa-life-ring"></i>',
-                selected: '<i class="fa fa-life-ring"></i>',
+            fontawesome_beer: {
+                base: '<i class="fa fa-beer"></i>',
+                hover: '<i class="fa fa-beer"></i>',
+                selected: '<i class="fa fa-beer"></i>',
+            },
+            fontawesome_star: {
+                base: '<i class="fa fa-star-o"></i>',
+                hover: '<i class="fa fa-star"></i>',
+                selected: '<i class="fa fa-star"></i>',
             },
             image: {
                 base: '<div class="im">&nbsp;</div>',

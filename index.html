@@ -45,7 +45,13 @@
             $("#rate3").rate(options3);
 
             $("#rate4").rate({
-                selected_symbol_type: 'fontawesome_test',
+                selected_symbol_type: 'fontawesome_beer',
+                max_value: 5,
+                step_size: 0.25,
+            });
+
+            $("#rate6").rate({
+                selected_symbol_type: 'fontawesome_star',
                 max_value: 5,
                 step_size: 0.25,
             });
@@ -60,6 +66,11 @@
     </script>
 
     <style>
+        body
+        {
+            font-size: 35px;
+            font-family: sans-serif;
+        }
         .rate-base-layer
         {
             color: #aaa;
@@ -83,25 +94,44 @@
         .im
         {
             background-image: url('./images/heart.gif');
-            background-size: 16px 16px;
+            background-size: 32px 32px;
             background-repeat: no-repeat;
-            width: 16px;
-            height: 16px;
+            width: 32px;
+            height: 32px;
             display: inline-block;
         }
         #rate5 .rate-base-layer span
         {
             opacity: 0.5;
         }
+        hr
+        {
+            border: 1px solid #ccc;
+        }
+        p
+        {
+            font-size: 15px;
+        }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body>
+    <p>UTF8</p>
     <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
     <div class="rate2"></div>
+
+    <hr>
+    <p>UTF-32</p>
     <div id="rate3"></div>
+
+    <hr>
+    <p>Font awesome</p>
     <div id="rate4"></div>
+    <div id="rate6"></div>
+
+    <hr>
+    <p>Image or any other HTML element</p>
     <div id="rate5"></div>
 </body>
 </html>
