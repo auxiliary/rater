@@ -178,7 +178,8 @@
             overflow: 'hidden',
             position: 'absolute',
             top: 0,
-            display: visible ? 'block' : 'none'
+            display: visible ? 'block' : 'none',
+            'white-space': 'nowrap'
         });
         $(this.element).css({
             width: $(layer).textWidth() + "px",
