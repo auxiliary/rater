@@ -8,6 +8,13 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="./scripts/rater.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            $("#rate1").rate();
+        });
+    </script>
   </head>
   <body>
     <section class="page-header">
@@ -23,6 +30,8 @@
 <a id="raterjs" class="anchor" href="#raterjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rater.js</h1>
 
 <p>A highly customizable rating widget that supports images, utf8 glyphs and other html elements!</p>
+
+<div id="rate1" data-rate-value="4.5"></div>
 
 <h4>
 <a id="simple-usage" class="anchor" href="#simple-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple usage</h4>
