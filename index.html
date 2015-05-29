@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Rater.js by auxiliary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Rater.js</h1>
+      <h2 class="project-tagline">A highly customizable rating widget that supports images, utf8 glyphs and other html elements!</h2>
+      <a href="https://github.com/auxiliary/rater" class="btn">View on GitHub</a>
+      <a href="https://github.com/auxiliary/rater/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/auxiliary/rater/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="raterjs" class="anchor" href="#raterjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rater.js</h1>
+
+<p>A highly customizable rating widget that supports images, utf8 glyphs and other html elements!</p>
+
+<h4>
+<a id="simple-usage" class="anchor" href="#simple-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple usage</h4>
+
+<p>Depends on jQuery</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c">// Options</span>
+<span class="pl-k">var</span> options <span class="pl-k">=</span> {
+    max_value<span class="pl-k">:</span> <span class="pl-c1">10</span>,
+    step_size<span class="pl-k">:</span> <span class="pl-c1">0.5</span>,
+    initial_value<span class="pl-k">:</span> <span class="pl-c1">0</span>,
+    selected_symbol_type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>utf8_star<span class="pl-pds">'</span></span>, <span class="pl-c">// Must be a key from symbols</span>
+    cursor<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>default<span class="pl-pds">'</span></span>,
+    readonly<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+    change_once<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Determines if the rating can only be set once</span>
+    ajax_method<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>POST<span class="pl-pds">'</span></span>,
+    url<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>http://localhost/test.php<span class="pl-pds">'</span></span>,
+    additional_data<span class="pl-k">:</span> {} <span class="pl-c">// Additional data to send to the server</span>
+}
+
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(options);</pre></div>
+
+<p>The data-rate-value attribute is optional. The value will fallback to the initial
+value in the settings and to 0 if not provided.</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>rating<span class="pl-pds">"</span></span> <span class="pl-e">data-rate-value</span>=<span class="pl-s">6</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<h4>
+<a id="useful-methods" class="anchor" href="#useful-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Useful methods</h4>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getValue<span class="pl-pds">"</span></span>);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>setValue<span class="pl-pds">"</span></span>);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>increment<span class="pl-pds">"</span></span>);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>decrement<span class="pl-pds">"</span></span>);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getElement<span class="pl-pds">"</span></span>, layer_name, element_index);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getLayers<span class="pl-pds">"</span></span>);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>setFace<span class="pl-pds">"</span></span>, value, face);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>removeFace<span class="pl-pds">"</span></span>, value);
+
+<span class="pl-c">// Set additional information to be sent with the ajax request</span>
+$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>setAdditionalData<span class="pl-pds">"</span></span>, {id<span class="pl-k">:</span> <span class="pl-c1">42</span>});
+$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getAdditionalData<span class="pl-pds">"</span></span>);</pre></div>
+
+<h4>
+<a id="useful-events" class="anchor" href="#useful-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Useful events</h4>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).on(<span class="pl-s"><span class="pl-pds">"</span>change<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">ev</span>, <span class="pl-smi">data</span>){
+  <span class="pl-en">console</span><span class="pl-c1">.log</span>(data.from, data.to);
+});
+
+$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).on(<span class="pl-s"><span class="pl-pds">"</span>updateSuccess<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">ev</span>, <span class="pl-smi">data</span>){
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">"</span>This is a custom success event<span class="pl-pds">"</span></span>);
+});
+
+$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).on(<span class="pl-s"><span class="pl-pds">"</span>updateError<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">ev</span>, <span class="pl-smi">jxhr</span>, <span class="pl-smi">msg</span>, <span class="pl-smi">err</span>){
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">"</span>This is a custom error event<span class="pl-pds">"</span></span>);
+});</pre></div>
+
+<h4>
+<a id="deleting" class="anchor" href="#deleting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting</h4>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>destroy<span class="pl-pds">"</span></span>);
+$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).<span class="pl-c1">remove</span>(); <span class="pl-c">//This will remove the elements from the DOM</span></pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/auxiliary/rater">Rater.js</a> is maintained by <a href="https://github.com/auxiliary">auxiliary</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
