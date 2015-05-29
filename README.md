@@ -1,7 +1,9 @@
 # rater
-A rating widget using utf8 glyphs and low dependencies
+A highly customizable rating widget that supports images, utf8 glyphs and other html elements!
 
 #### Simple usage
+
+Depends on jQuery
 
 ```javascript
 // Options
