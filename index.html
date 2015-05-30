@@ -61,6 +61,13 @@
                 max_value: 5,
                 step_size: 0.25,
             });
+
+            $("#rate7").rate({
+                selected_symbol_type: 'image2',
+                max_value: 5,
+                step_size: 0.1,
+            });
+
         }), 5000);
 
     </script>
@@ -100,7 +107,16 @@
             height: 32px;
             display: inline-block;
         }
-        #rate5 .rate-base-layer span
+        .im2
+        {
+            background-image: url('./images/violin.png');
+            background-size: 64px 64px;
+            background-repeat: no-repeat;
+            width: 64px;
+            height: 64px;
+            display: inline-block;
+        }
+        #rate5 .rate-base-layer span, #rate7 .rate-base-layer span
         {
             opacity: 0.5;
         }
@@ -133,5 +149,6 @@
     <hr>
     <p>Image or any other HTML element</p>
     <div id="rate5"></div>
+    <div id="rate7"></div>
 </body>
 </html>

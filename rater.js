@@ -24,17 +24,12 @@
 
     $.fn.textHeight = function()
     {
-        return $(this).height();
-
-        // Should be removed after testing
-        /*
         var html_calc = $('<span>' + $(this).html() + '</span>');
         html_calc.css('font-size',$(this).css('font-size')).hide();
         html_calc.prependTo('body');
         var height = html_calc.height();
         html_calc.remove();
         return height;
-        */
     }
 
     /*
@@ -450,6 +445,11 @@
                 base: '<div class="im">&nbsp;</div>',
                 hover: '<div class="im">&nbsp;</div>',
                 selected: '<div class="im">&nbsp;</div>',
+            },
+            image2: {
+                base: '<div class="im2">&nbsp;</div>',
+                hover: '<div class="im2">&nbsp;</div>',
+                selected: '<div class="im2">&nbsp;</div>',
             },
             utf8_emoticons: {
                 base: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
