@@ -1,5 +1,5 @@
 /*
- * A rating widget using utf8 glyphs and low dependencies
+ * A highly customizable rating widget that supports images, utf8 glyphs and other html elements!
  * https://github.com/auxiliary/rater
  */
 ;(function ($, window){
@@ -49,6 +49,9 @@
         return String.fromCharCode.apply(null, chars);
     };
 
+    /*
+     * Starting the plugin itself
+     */
     $.fn.rate = function(options)
     {
         if (options === undefined || typeof options === 'object')
@@ -109,6 +112,18 @@
          * Calculate the selected width based on the initial value
          */
         var selected_width = this.value / this.settings.max_value * 100;
+
+        /*
+         * Let's support single strings as symbols as well as objects
+         */
+        if (typeof this.settings.symbols[this.settings.selected_symbol_type] === 'string')
+        {
+            var symbol = this.settings.symbols[this.settings.selected_symbol_type];
+            this.settings.symbols[this.settings.selected_symbol_type] = {};
+            this.settings.symbols[this.settings.selected_symbol_type]['base'] = symbol;
+            this.settings.symbols[this.settings.selected_symbol_type]['selected'] = symbol;
+            this.settings.symbols[this.settings.selected_symbol_type]['hover'] = symbol;
+        }
 
         /*
          * Making the three main layers (base, select, hover)
@@ -261,7 +276,7 @@
                 this.layers.hover_layer.children("span").css({
                     visibility: 'hidden',
                 });
-                this.layers.hover_layer.children("span").eq(index_value-1).css({
+                this.layers.hover_layer.children("span").eq(index_value != 0 ? index_value - 1 : 0).css({
                     visibility: 'visible',
                 });
             }
@@ -417,7 +432,7 @@
             /*
              * Set styles based on width and value
              */
-            if (this.settings.only_select_one_symbol === false)
+            if (!this.settings.only_select_one_symbol)
             {
                 var width = this.toWidth(this.value);
                 this.layers.select_layer.css({
@@ -445,7 +460,7 @@
                 this.layers.select_layer.children("span").css({
                     visibility: 'hidden',
                 });
-                this.layers.select_layer.children("span").eq(index_value - 1).css({
+                this.layers.select_layer.children("span").eq(index_value != 0 ? index_value - 1 : 0).css({
                     visibility: 'visible',
                 });
             }
@@ -503,16 +518,8 @@
                 hover: '\u2B22',
                 selected: '\u2B22',
             },
-            hearts: {
-                base: '&hearts;',
-                hover: '&hearts;',
-                selected: '&hearts;',
-            },
-            fontawesome_beer: {
-                base: '<i class="fa fa-beer"></i>',
-                hover: '<i class="fa fa-beer"></i>',
-                selected: '<i class="fa fa-beer"></i>',
-            },
+            hearts: '&hearts;',
+            fontawesome_beer: '<i class="fa fa-beer"></i>',
             fontawesome_star: {
                 base: '<i class="fa fa-star-o"></i>',
                 hover: '<i class="fa fa-star"></i>',
@@ -532,7 +539,7 @@
         only_select_one_symbol: false, // If set to true, only selects the hovered/selected symbol and nothing prior to it
         ajax_method: 'POST',
         additional_data: {}, // Additional data to send to the server
-        //update_input_field_name = some input field
+        //update_input_field_name = some input field set by the user
     };
 
 }(jQuery, window));
