@@ -103,11 +103,7 @@ options = {
             hover: '\u2B22',
             selected: '\u2B22',
         },
-        hearts: {
-            base: '&hearts;',
-            hover: '&hearts;',
-            selected: '&hearts;',
-        },
+        hearts: '&hearts;',
         fontawesome_star: {
             base: '<i class="fa fa-star-o"></i>',
             hover: '<i class="fa fa-star"></i>',
@@ -143,7 +139,9 @@ options = {
     change_once: false, // Determines if the rating can only be set once
     ajax_method: 'POST',
     url: 'http://localhost/test.php',
-    additional_data: {} // Additional data to send to the server
+    additional_data: {}, // Additional data to send to the server
+    only_select_one_symbol: false, // If set to true, only selects the hovered/selected symbol and nothing prior to it
+    //update_input_field_name = some input field set by the user
 };
 
 $(".rating").rate(options);
@@ -205,6 +203,8 @@ $(".rating").remove(); //This will remove the elements from the DOM
 
 <h4>Examples</h4>
 <div id="rate2"></div>
+
+<p>There are many examples in the "index.html" file in the repository</p>
 
 
       <footer class="site-footer">
