@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <title>Example</title>
     <script src="http://code.jquery.com/jquery-1.11.3.min.js" charset="utf-8"></script>
+    <script src="http://ricostacruz.com/jquery.transit/jquery.transit.min.js" charset="utf-8"></script>
     <script src="rater.js" charset="utf-8"></script>
     <script>
-        $(document).ready(
-        setTimeout(
-        function(){
+        $(document).ready(function(){
             var options = {
                 max_value: 6,
                 step_size: 0.5,
@@ -44,32 +43,55 @@
             };
             $("#rate3").rate(options3);
 
-            $("#rate4").rate({
-                selected_symbol_type: 'fontawesome_beer',
-                max_value: 5,
-                step_size: 0.25,
-            });
+            setTimeout(function(){
+                $("#rate4").rate({
+                    selected_symbol_type: 'fontawesome_beer',
+                    max_value: 5,
+                    step_size: 0.25,
+                });
 
-            $("#rate6").rate({
-                selected_symbol_type: 'fontawesome_star',
-                max_value: 5,
-                step_size: 0.25,
-            });
+                $("#rate6").rate({
+                    selected_symbol_type: 'fontawesome_star',
+                    max_value: 5,
+                    step_size: 0.25,
+                });
+            }, 2000);
 
             $("#rate5").rate({
                 selected_symbol_type: 'image',
                 max_value: 5,
-                step_size: 0.25,
+                step_size: 1,
+                symbols: {
+                    image: {
+                        base: '<div class="im">&nbsp;</div>',
+                        hover: '<div class="im">&nbsp;</div>',
+                        selected: '<div class="im">&nbsp;</div>',
+                    },
+                }
+            });
+
+            $("#rate5").on("afterChange", function(ev, data){
+                var index = Math.floor(data.to);
+                var el = $("#rate5").rate("getElement", "select-layer", index);
+                $(el).transition({
+                    perspective: '100px',
+                    rotateY: '360deg'
+                });
             });
 
             $("#rate7").rate({
                 selected_symbol_type: 'image2',
                 max_value: 5,
-                step_size: 0.1,
+                step_size: 1,
+                symbols:{
+                    image2: {
+                        base: '<div class="im2">&nbsp;</div>',
+                        hover: '<div class="im2">&nbsp;</div>',
+                        selected: '<div class="im2">&nbsp;</div>',
+                    },
+                },
             });
-
-        }), 5000);
-
+        });
     </script>
 
     <style>

@@ -20,7 +20,7 @@
             return total;
         }
         return width;
-    }
+    };
 
     $.fn.textHeight = function()
     {
@@ -30,7 +30,7 @@
         var height = html_calc.height();
         html_calc.remove();
         return height;
-    }
+    };
 
     /*
      * Utf-32 isn't supported by default, so we have to use Utf-8 surrogates
@@ -135,6 +135,18 @@
         $(this.element).on("mousemove", $.proxy(this.hover, this));
         $(this.element).on("click", $.proxy(this.select, this));
         $(this.element).on("mouseleave", $.proxy(this.mouseout, this));
+
+        /*
+         * Set the main element as unselectable
+         */
+        $(this.element).css({
+            "-webkit-touch-callout": "none",
+            "-webkit-user-select": "none",
+            "-khtml-user-select": "none",
+            "-moz-user-select": "none",
+            "-ms-user-select": "none",
+            "user-select": "none",
+        });
 
         this.value = this.toValue(selected_width * $(base_layer).textWidth());
     }
@@ -398,6 +410,15 @@
                 this.settings.readonly = true;
             }
             this.updateServer();
+
+            /*
+             * About to change event, should support prevention later
+             */
+            var change_event = $(this.element).trigger("afterChange", {
+                "from": old_value,
+                "to": this.value
+            });
+
         }
     }
 
@@ -440,16 +461,6 @@
                 base: '<i class="fa fa-star-o"></i>',
                 hover: '<i class="fa fa-star"></i>',
                 selected: '<i class="fa fa-star"></i>',
-            },
-            image: {
-                base: '<div class="im">&nbsp;</div>',
-                hover: '<div class="im">&nbsp;</div>',
-                selected: '<div class="im">&nbsp;</div>',
-            },
-            image2: {
-                base: '<div class="im2">&nbsp;</div>',
-                hover: '<div class="im2">&nbsp;</div>',
-                selected: '<div class="im2">&nbsp;</div>',
             },
             utf8_emoticons: {
                 base: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
