@@ -8,13 +8,45 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+
     <script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
     <script src="./scripts/rater.js" type="text/javascript"></script>
+    <style>
+        #rate1
+        {
+            font-size: 45px;
+            margin: 0 auto;
+        }
+        #rate2
+        {
+            font-size: 45px;
+        }
+        #rate2 .rate-hover-layer
+        {
+            color: pink;
+        }
+        #rate2 .rate-select-layer
+        {
+            color: red;
+        }
+    </style>
     <script>
+        hljs.initHighlightingOnLoad();
         $(document).ready(function(){
             $("#rate1").rate();
+
+            var options2 = {
+                max_value: 6,
+                step_size: 0.5,
+                selected_symbol_type: 'hearts',
+                initial_value: 3,
+            }
+            $("#rate2").rate(options2);
         });
     </script>
+
   </head>
   <body>
     <section class="page-header">
@@ -36,65 +68,144 @@
 <h4>
 <a id="simple-usage" class="anchor" href="#simple-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple usage</h4>
 
-<p>Depends on jQuery</p>
 
-<div class="highlight highlight-javascript"><pre><span class="pl-c">// Options</span>
-<span class="pl-k">var</span> options <span class="pl-k">=</span> {
-    max_value<span class="pl-k">:</span> <span class="pl-c1">10</span>,
-    step_size<span class="pl-k">:</span> <span class="pl-c1">0.5</span>,
-    initial_value<span class="pl-k">:</span> <span class="pl-c1">0</span>,
-    selected_symbol_type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>utf8_star<span class="pl-pds">'</span></span>, <span class="pl-c">// Must be a key from symbols</span>
-    cursor<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>default<span class="pl-pds">'</span></span>,
-    readonly<span class="pl-k">:</span> <span class="pl-c1">false</span>,
-    change_once<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Determines if the rating can only be set once</span>
-    ajax_method<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>POST<span class="pl-pds">'</span></span>,
-    url<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>http://localhost/test.php<span class="pl-pds">'</span></span>,
-    additional_data<span class="pl-k">:</span> {} <span class="pl-c">// Additional data to send to the server</span>
+
+<pre>
+    <code>
+$(".rating").rate();
+
+//or for example
+var options = {
+    max_value: 6,
+    step_size: 0.5,
 }
-
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(options);</pre></div>
+$(".rating").rate(options);
+    </code>
+</pre>
 
 <p>The data-rate-value attribute is optional. The value will fallback to the initial
 value in the settings and to 0 if not provided.</p>
 
 <div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>rating<span class="pl-pds">"</span></span> <span class="pl-e">data-rate-value</span>=<span class="pl-s">6</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
 
+<p>Custom symbols can be added through the symbol object in the settings. UTF8, UTF32 and basically any image or HTML element should work. Here are a few examples: </p>
+<pre>
+    <code>
+options = {
+    symbols = {
+        utf8_star: {
+            base: '\u2606',
+            hover: '\u2605',
+            selected: '\u2605',
+        },
+        utf8_hexagon: {
+            base: '\u2B21',
+            hover: '\u2B22',
+            selected: '\u2B22',
+        },
+        hearts: {
+            base: '&hearts;',
+            hover: '&hearts;',
+            selected: '&hearts;',
+        },
+        fontawesome_star: {
+            base: '<i class="fa fa-star-o"></i>',
+            hover: '<i class="fa fa-star"></i>',
+            selected: '<i class="fa fa-star"></i>',
+        },
+        utf32_emoticons: {
+            base: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
+            hover: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
+            selected: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
+        }
+    },
+    selected_symbol_type: 'utf32_emoticons',
+    convert_to_utf8: true
+}
+    </code>
+</pre>
+
+<p>*Make sure to set convert_to_utf8 to true for UTF32 characters</p>
+
+<h4>The full list of options</h4>
+<pre>
+    <code class="javascript">
+// Options
+options = {
+    max_value: 5,
+    step_size: 0.5,
+    initial_value: 0,
+    symbols: {},
+    selected_symbol_type: 'utf8_star', // Must be a key from symbols
+    convert_to_utf8: false,
+    cursor: 'default',
+    readonly: false,
+    change_once: false, // Determines if the rating can only be set once
+    ajax_method: 'POST',
+    url: 'http://localhost/test.php',
+    additional_data: {} // Additional data to send to the server
+};
+
+$(".rating").rate(options);
+    </code>
+</pre>
+
+
 <h4>
 <a id="useful-methods" class="anchor" href="#useful-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Useful methods</h4>
 
-<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getValue<span class="pl-pds">"</span></span>);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>setValue<span class="pl-pds">"</span></span>);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>increment<span class="pl-pds">"</span></span>);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>decrement<span class="pl-pds">"</span></span>);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getElement<span class="pl-pds">"</span></span>, layer_name, element_index);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getLayers<span class="pl-pds">"</span></span>);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>setFace<span class="pl-pds">"</span></span>, value, face);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>removeFace<span class="pl-pds">"</span></span>, value);
+<pre>
+    <code>
+$(".rating").rate("getValue");
+$(".rating").rate("setValue");
+$(".rating").rate("increment");
+$(".rating").rate("decrement");
+$(".rating").rate("getElement", layer_name, element_index);
+$(".rating").rate("getLayers");
+$(".rating").rate("setFace", value, face);
+$(".rating").rate("removeFace", value);
 
-<span class="pl-c">// Set additional information to be sent with the ajax request</span>
-$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>setAdditionalData<span class="pl-pds">"</span></span>, {id<span class="pl-k">:</span> <span class="pl-c1">42</span>});
-$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>getAdditionalData<span class="pl-pds">"</span></span>);</pre></div>
+// Set additional information to be sent with the ajax request
+$(".rate2").rate("setAdditionalData", {id: 42});
+$(".rate2").rate("getAdditionalData");
+    </code>
+</pre>
 
 <h4>
 <a id="useful-events" class="anchor" href="#useful-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Useful events</h4>
 
-<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).on(<span class="pl-s"><span class="pl-pds">"</span>change<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">ev</span>, <span class="pl-smi">data</span>){
-  <span class="pl-en">console</span><span class="pl-c1">.log</span>(data.from, data.to);
+<pre>
+    <code>
+$(".rating").on("change", function(ev, data){
+    console.log(data.from, data.to);
 });
 
-$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).on(<span class="pl-s"><span class="pl-pds">"</span>updateSuccess<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">ev</span>, <span class="pl-smi">data</span>){
-    <span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">"</span>This is a custom success event<span class="pl-pds">"</span></span>);
+$(".rating").on("afterChange", function(ev, data){
+    console.log(data.from, data.to);
 });
 
-$(<span class="pl-s"><span class="pl-pds">"</span>.rate2<span class="pl-pds">"</span></span>).on(<span class="pl-s"><span class="pl-pds">"</span>updateError<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">ev</span>, <span class="pl-smi">jxhr</span>, <span class="pl-smi">msg</span>, <span class="pl-smi">err</span>){
-    <span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">"</span>This is a custom error event<span class="pl-pds">"</span></span>);
-});</pre></div>
+$(".rate2").on("updateSuccess", function(ev, data){
+    console.log("This is a custom success event");
+});
 
+$(".rate2").on("updateError", function(ev, jxhr, msg, err){
+    console.log("This is a custom error event");
+});
+    </code>
+</pre>
 <h4>
 <a id="deleting" class="anchor" href="#deleting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting</h4>
 
-<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).rate(<span class="pl-s"><span class="pl-pds">"</span>destroy<span class="pl-pds">"</span></span>);
-$(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"</span></span>).<span class="pl-c1">remove</span>(); <span class="pl-c">//This will remove the elements from the DOM</span></pre></div>
+<pre>
+    <code>
+$(".rating").rate("destroy");
+$(".rating").remove(); //This will remove the elements from the DOM
+    </code>
+</pre>
+
+<h4>Examples</h4>
+<div id="rate2"></div>
+
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/auxiliary/rater">Rater.js</a> is maintained by <a href="https://github.com/auxiliary">auxiliary</a>.</span>
@@ -104,7 +215,6 @@ $(<span class="pl-s"><span class="pl-pds">"</span>.rating<span class="pl-pds">"<
 
     </section>
 
-  
+
   </body>
 </html>
-
