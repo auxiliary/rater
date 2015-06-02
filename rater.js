@@ -33,6 +33,13 @@
     };
 
     /*
+     * IE8 doesn't support isArray!
+     */
+    Array.isArray = function (obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]";
+    };
+
+    /*
      * Utf-32 isn't supported by default, so we have to use Utf-8 surrogates
      */
     String.prototype.getCodePointLength = function() {
