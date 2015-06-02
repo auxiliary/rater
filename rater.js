@@ -149,6 +149,14 @@
         });
 
         this.value = this.toValue(selected_width * $(base_layer).textWidth());
+
+        /*
+         * Update custom input field if provided
+         */
+        if (this.settings.hasOwnProperty("update_input_field_name"))
+        {
+            this.settings.update_input_field_name.val(this.value);
+        }
     }
 
     /*
@@ -459,6 +467,14 @@
                 "to": this.value
             });
 
+            /*
+             * Update custom input field if provided
+             */
+            if (this.settings.hasOwnProperty("update_input_field_name"))
+            {
+                this.settings.update_input_field_name.val(this.value);
+            }
+
         }
     }
 
@@ -515,7 +531,8 @@
         change_once: false, // Determines if the rating can only be set once
         only_select_one_symbol: false, // If set to true, only selects the hovered/selected symbol and nothing prior to it
         ajax_method: 'POST',
-        additional_data: {} // Additional data to send to the server
+        additional_data: {}, // Additional data to send to the server
+        //update_input_field_name = some input field
     };
 
 }(jQuery, window));

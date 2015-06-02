@@ -28,7 +28,7 @@
 
             $(".rate2").rate("setAdditionalData", {id: 42});
             $(".rate2").on("updateSuccess", function(ev, data){
-                //console.log(data);
+                console.log(data);
             });
 
             $(".rate").rate("setFace", 5, '😊');
@@ -83,6 +83,7 @@
                 selected_symbol_type: 'image2',
                 max_value: 5,
                 step_size: 1,
+                update_input_field_name: $("#input1"),
                 symbols:{
                     image2: {
                         base: '<div class="im2">&nbsp;</div>',
@@ -172,5 +173,7 @@
     <p>Image or any other HTML element</p>
     <div id="rate5"></div>
     <div id="rate7"></div>
+
+    <input id="input1" type="text">
 </body>
 </html>
