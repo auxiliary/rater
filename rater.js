@@ -235,12 +235,28 @@
         if (!this.raise_select_layer && !this.settings.readonly)
         {
             var visible_width = this.toWidth(val);
-
             this.layers.select_layer.css({display: 'none'});
-            this.layers.hover_layer.css({
-                width: visible_width + "%",
-                display: 'block'
-            });
+            if (!this.settings.only_select_one_symbol)
+            {
+                this.layers.hover_layer.css({
+                    width: visible_width + "%",
+                    display: 'block'
+                });
+            }
+            else
+            {
+                var index_value = Math.floor(val);
+                this.layers.hover_layer.css({
+                    width: "100%",
+                    display: 'block'
+                });
+                this.layers.hover_layer.children("span").css({
+                    visibility: 'hidden',
+                });
+                this.layers.hover_layer.children("span").eq(index_value-1).css({
+                    visibility: 'visible',
+                });
+            }
         }
     }
 
@@ -393,16 +409,40 @@
             /*
              * Set styles based on width and value
              */
-            var width = this.toWidth(this.value);
-            this.layers.select_layer.css({
-                display: 'block',
-                width: width + "%",
-                height: this.layers.base_layer.css("height")
-            });
-            this.layers.hover_layer.css({
-                display: 'none',
-                height: this.layers.base_layer.css("height")
-            });
+            if (this.settings.only_select_one_symbol === false)
+            {
+                var width = this.toWidth(this.value);
+                this.layers.select_layer.css({
+                    display: 'block',
+                    width: width + "%",
+                    height: this.layers.base_layer.css("height")
+                });
+                this.layers.hover_layer.css({
+                    display: 'none',
+                    height: this.layers.base_layer.css("height")
+                });
+            }
+            else
+            {
+                var width = this.toWidth(this.settings.max_value);
+                this.layers.select_layer.css({
+                    display: 'block',
+                    width: width + "%",
+                    height: this.layers.base_layer.css("height")
+                });
+                this.layers.hover_layer.css({
+                    display: 'none',
+                    height: this.layers.base_layer.css("height")
+                });
+                this.layers.select_layer.children("span").css({
+                    visibility: 'hidden',
+                });
+                this.layers.select_layer.children("span").eq(index_value - 1).css({
+                    visibility: 'visible',
+                });
+            }
+
+            // Update the data-rate-value attribute
             $(this.element).attr("data-rate-value", this.value);
 
             if (this.settings.change_once)
@@ -412,7 +452,7 @@
             this.updateServer();
 
             /*
-             * About to change event, should support prevention later
+             * After change event
              */
             var change_event = $(this.element).trigger("afterChange", {
                 "from": old_value,
@@ -473,6 +513,7 @@
         cursor: 'default',
         readonly: false,
         change_once: false, // Determines if the rating can only be set once
+        only_select_one_symbol: false, // If set to true, only selects the hovered/selected symbol and nothing prior to it
         ajax_method: 'POST',
         additional_data: {} // Additional data to send to the server
     };

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Example</title>
     <script src="http://code.jquery.com/jquery-1.11.3.min.js" charset="utf-8"></script>
-    <script src="http://ricostacruz.com/jquery.transit/jquery.transit.min.js" charset="utf-8"></script>
     <script src="rater.js" charset="utf-8"></script>
     <script>
         $(document).ready(function(){
@@ -40,6 +39,7 @@
                 max_value: 4,
                 step_size: 1,
                 convert_to_utf8: true,
+                only_select_one_symbol: true
             };
             $("#rate3").rate(options3);
 
