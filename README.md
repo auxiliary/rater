@@ -1,6 +1,8 @@
 # rater
 A highly customizable rating widget that supports images, utf8 glyphs and other html elements!
 
+[![Build Status](https://travis-ci.org/auxiliary/rater.svg?branch=master)](https://travis-ci.org/auxiliary/rater)
+
 #### Simple usage
 
 Depends on jQuery
