@@ -170,8 +170,6 @@
             "user-select": "none",
         });
 
-        this.value = this.toValue(selected_width * $(base_layer).textWidth());
-
         /*
          * Update custom input field if provided
          */

@@ -15,6 +15,7 @@
                 selected_symbol_type: 'hearts',
                 url: 'http://localhost/test.php',
                 initial_value: 3,
+                update_input_field_name: $("#input2"),
             }
             $(".rate").rate();
 
@@ -41,7 +42,7 @@
                 max_value: 4,
                 step_size: 1,
                 convert_to_utf8: true,
-                only_select_one_symbol: true
+                only_select_one_symbol: true,
             };
             $("#rate3").rate(options3);
 
@@ -164,6 +165,7 @@
     <div class="rate" data-rate-value=6></div>
     <div class="rate"></div>
     <div class="rate2"></div>
+    <input id="input2" type="text">
 
     <hr>
     <p>UTF-32</p>
