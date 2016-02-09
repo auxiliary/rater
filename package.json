@@ -1,0 +1,30 @@
+{
+  "name": "rater",
+  "title": "Rater",
+  "description": "A highly customizable rating widget that supports images, utf8 glyphs and other html elements",
+  "keywords": [
+    "rater",
+    "jquery-plugin",
+    "rating",
+    "star",
+    "widget"
+  ],
+  "version": "1.0.0",
+  "author": "Mohammad A.raji",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/auxiliary/rater/issues/new"
+  },
+  "main": "rater.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/auxiliary/rater.git"
+  },
+  "homepage": "https://github.com/auxiliary/rater",
+  "license": "MIT"
+}

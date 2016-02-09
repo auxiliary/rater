@@ -3,7 +3,7 @@
   "main": "rater.js",
   "version": "1.0.0",
   "homepage": "https://github.com/auxiliary/rater",
-  "description": "A customizable rating widget using UTF8 glyphs",
+  "description": "A highly customizable rating widget that supports images, utf8 glyphs and other html elements",
   "keywords": [
     "rating",
     "star",
