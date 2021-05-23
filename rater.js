@@ -524,11 +524,11 @@
                 selected: '\u2B22',
             },
             hearts: '&hearts;',
-            fontawesome_beer: '<i class="fa fa-beer"></i>',
+            fontawesome_beer: '<i class="fas fa-beer"></i>',
             fontawesome_star: {
-                base: '<i class="fa fa-star-o"></i>',
-                hover: '<i class="fa fa-star"></i>',
-                selected: '<i class="fa fa-star"></i>',
+                base: '<i class="far fa-star"></i>',
+                hover: '<i class="fas fa-star"></i>',
+                selected: '<i class="fas fa-star"></i>',
             },
             utf8_emoticons: {
                 base: [0x1F625, 0x1F613, 0x1F612, 0x1F604],
